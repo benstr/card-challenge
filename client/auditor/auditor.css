@@ -1,0 +1,6 @@
+.auditor .Failed {
+    color: darkred;
+}
+.auditor .Passed {
+    color: green;
+}

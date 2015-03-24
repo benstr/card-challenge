@@ -1,0 +1,12 @@
+<template name="shuffler">
+  <h4>Shuffler</h4>
+  <div class="fixed-action-btn" style="bottom: 24px; right: 24px;">
+  	<button data-action="shuffleCards" class="btn-floating btn-large waves-effect waves-light red"><i class="mdi-action-settings-backup-restore"></i></button>
+	</div>
+	<div>
+	{{>cardFace card="card52" }}
+	{{#each cardName}}
+			{{>cardFace card=this }}
+	{{/each}}
+  </div>
+</template>

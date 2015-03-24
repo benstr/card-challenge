@@ -1,0 +1,23 @@
+<template name="auditor">
+	<h4>Auditor</h4>
+  <ul class="collection auditor">
+    <li class="collection-item dismissable">
+      <div class="truncate">There are 52 cards<span class="secondary-content {{auditNum}}">{{auditNum}}</span></div>
+    </li>
+    <li class="collection-item dismissable">
+			<div class="truncate">No duplicate in last {{poolSize}} decks<span class="secondary-content {{auditDup}}">{{auditDup}}</span></div>
+		</li>
+    <li class="collection-item dismissable">
+			<div class="truncate">No reverse duplicate in last {{poolSize}} decks<span class="secondary-content {{auditDupRev}}">{{auditDupRev}}</span></div>
+		</li>
+    <li class="collection-item dismissable">
+      <div class="truncate">Not in order<span class="secondary-content {{auditOrder}}">{{auditOrder}}</span></div>
+    </li>
+    <li class="collection-item dismissable">
+      <div class="truncate">Not in reverse order<span class="secondary-content {{auditOrderRev}}">{{auditOrderRev}}</span></div>
+    </li>
+    <li class="collection-item dismissable">
+      <div class="truncate">Suits are not grouped<span class="secondary-content {{auditSuitesSbS}}">{{auditSuitesSbS}}</span></div>
+    </li>
+  </ul>
+</template>
