@@ -1,0 +1,9 @@
+.card {
+    transition: all 3000ms 0ms ease-in;
+    margin: 0.5rem;
+}
+
+.shuffle-btn {
+    bottom: 24px;
+    right: 24px;
+}

@@ -6,7 +6,7 @@ Template.shuffler.events({
 Template.shuffler.helpers({
   cardName: function(){
     templateDeck = [];
-    _.forEach(shuffledDeck.get(),function(n,key){
+    lodash.forEach(shuffledDeck.get(),function(n,key){
       templateDeck[key] = "card"+n;
     });
     return templateDeck;

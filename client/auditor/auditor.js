@@ -1,17 +1,25 @@
-var sampleLimit = 1000;
+var deckSize = 52;
+var successMsg = "Passed";
+var failMsg = "Failed";
+var deckId,deck,sample;
+Tracker.autorun(function(){
+  sampleLimit.set(Decks.find().count());
+  deckId = currentDeckId.get();
+  deck = Decks.findOne(deckId,{fields:{array:1}});
+  sample = Decks.find({},{fields:{array:1}}).fetch();
+  positions = CardPositions.find({"deck":{$not:deckId}}).fetch();
+});
 
 Template.auditor.helpers({
   poolSize: function(){
-    return numeral(sampleLimit).format('0,0');
+    return numeral(sampleLimit.get()).format('0,0');
   },
   auditNum: function(){
     var deckId = currentDeckId.get();
     if(!deckId){
       return "Pending Shuffle";
     } else {
-      var deck = Decks.findOne(deckId,{fields:{array:1}});
-      var test = deck.array.length === 52;
-      return test ? "Passed" : "Failed";
+      return deck.array.length===deckSize ? successMsg : failMsg;
     }
   },
   auditDup: function(){
@@ -19,14 +27,7 @@ Template.auditor.helpers({
     if(!deckId){
       return "Pending Shuffle";
     } else {
-      var sample = Decks.find({},{limit:sampleLimit, fields:{array:1}}).fetch();
-      var deck = Decks.findOne(deckId,{fields:{array:1}});
-      if(sample.length <= sampleLimit){
-        var test = _.some(sample.pop(),{'array':deck.array});
-      } else {
-        var test = _.some(sample,{'array':deck.array});
-      }
-      return test ? "Failed" : "Passed";
+      return lodash.some(sample.pop(),{'array':deck.array}) ? failMsg : successMsg;
     }
   },
   auditDupRev: function(){
@@ -34,23 +35,23 @@ Template.auditor.helpers({
     if(!deckId){
       return "Pending Shuffle";
     } else {
-      var sample = Decks.find({},{limit:sampleLimit, fields:{array:1}}).fetch();
-      var deck = Decks.findOne(deckId,{fields:{array:1}});
-      if(sample.length <= sampleLimit){
-        var test = _.some(sample.pop(),{'array':deck.array.reverse()});
-      } else {
-        var test = _.some(sample,{'array':deck.array.reverse()});
-      }
-      return test ? "Failed" : "Passed";
+      return lodash.some(sample.pop(),{'array':deck.array.reverse()}) ? failMsg : successMsg;
     }
   },
-  auditOrder: function(){
-    return "Code Not Complete"
-  },
-  auditOrderRev: function(){
-    return "Code Not Complete"
-  },
-  auditSuitesSbS: function(){
-    return "Code Not Complete"
+  auditFairness: function(){
+    var deckId = currentDeckId.get();
+    if(!deckId){
+      return "Pending Shuffle";
+    } else {
+      var totalPast = 0;
+      var totalDups = 0;
+      lodash.forEach(deck.array,function(num,key){
+        var keyPositions = lodash.filter(positions,{"position":key});
+        var keyDups = lodash.filter(positions,{"position":key,"cardNum":num});
+        totalPast = totalPast+keyPositions.length;
+        totalDups = totalDups+keyDups.length;
+      });
+      return numeral(1-(totalDups/totalPast)).format('0.0%')+" fair";
+    }
   }
 });

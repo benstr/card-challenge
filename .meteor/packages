@@ -11,5 +11,4 @@ materialize:materialize
 numeral:numeral
 jquery
 reactive-var
-underscore
 stevezhu:lodash
